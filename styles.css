@@ -1,0 +1,58 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  --correct: #19631e;
+  --incorrect: #f6da5e;
+  --incorrect-alt: #f6c85e;
+}
+
+h1 {
+  text-align: center;
+}
+
+input, button[type="submit"] {
+  font-size: 1rem;
+  width: 5ch;
+  height:5ch;
+  text-align: center;
+  border-radius: 3px;
+  border: solid 1px slategray;
+}
+
+input.correct {
+  background: var(--correct);
+  color: white;
+  border-color: var(--correct);
+}
+
+input.misplaced {
+  background: linear-gradient(to right bottom, 
+    var(--incorrect-alt) 0%,
+    var(--incorrect-alt) 10%,
+    var(--incorrect) 10%,
+    var(--incorrect) 20%,
+    var(--incorrect-alt) 20%,
+    var(--incorrect-alt) 30%,
+    var(--incorrect) 30%,
+    var(--incorrect) 40%,
+    var(--incorrect-alt) 40%, 
+    var(--incorrect-alt) 50%, 
+    var(--incorrect) 50%,
+    var(--incorrect) 60%,
+    var(--incorrect-alt) 60%, 
+    var(--incorrect-alt) 70%, 
+    var(--incorrect) 70%,
+    var(--incorrect) 80%,
+    var(--incorrect-alt) 80%, 
+    var(--incorrect-alt) 90%, 
+    var(--incorrect) 90%,
+    var(--incorrect) 100%
+  );
+  border-color: var(--incorrect);
+}
+
+.row {
+  text-align: center;
+  margin-bottom: 3px;
+}
