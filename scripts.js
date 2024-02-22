@@ -9,13 +9,25 @@ const dictionary = [
   'lice',
 ];
 
-let wordOfTheDay;
+const letterCount = 4;
+let wordOfTheDay, focusable, currentRow = 1;
 
 (() => {
-  console.log('hello world');
-  document.addEventListener('submit', handleSubmit);
+  document.addEventListener('submit', handleSubmit)
   wordOfTheDay = getWordOfTheDay()
+  
+  focusable = Array.from(document.querySelectorAll('input, button[type="submit"]'))
+  focusable[0].focus();
+  const toDisable = focusable.slice(letterCount + 1)
+  toDisable.forEach(element => element.setAttribute('disabled', true))
+  addEventListener('keyup', handleKeydown);
 })()
+
+function handleKeydown(event) {
+  if (!/^[a-zA-Z]$/.test(event.key)) { return }
+  const index = focusable.findIndex(elem => elem === event.target)
+  focusable[index + 1].focus()
+}
 
 function getWordOfTheDay() {
   const wordIndex = getRandomInt(dictionary.length - 1)
@@ -47,8 +59,37 @@ function handleSubmit(event) {
   });
   console.log(arrayOfValues, wordOfTheDay)
   const isCorrect = arrayOfValues.reduce((acc, letter) => acc + letter, '') === wordOfTheDay
-  console.log('isCorrect', isCorrect)
-  console.log('We were valid continuing')
+  if (!isCorrect) {
+    const disabledFields = Array.from(document.querySelectorAll(':disabled'))
+    const toEnable = disabledFields.slice(currentRow * (letterCount + 1), (currentRow + 1) * (letterCount + 1));
+    toEnable.forEach(elem => elem.disabled = false)
+    if (toEnable[0]) { toEnable[0].focus() }
+    currentRow++
+    return
+  }
+
+  const playAgain = document.querySelector('.play-again');
+  playAgain.setAttribute('style', "display: inline-block");
+  playAgain.focus();
+}
+
+function playAgain() {
+  focusable
+    .forEach((elem, i) => {
+      if (elem.nodeName === 'INPUT') {
+        elem.value = ''
+        elem.classList.remove('correct')
+        elem.classList.remove('misplaced')
+      }
+      if (i < letterCount + 1) {
+        elem.removeAttribute('disabled')
+      } else {
+        elem.setAttribute('disabled', true)
+      }
+    })
+  currentRow = 1;
+  wordOfTheDay = getWordOfTheDay()
+  focusable[0].focus()
 }
 
 function getRandomInt(max) {

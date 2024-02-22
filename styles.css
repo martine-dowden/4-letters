@@ -5,28 +5,109 @@ body {
   --correct: #19631e;
   --incorrect: #f6da5e;
   --incorrect-alt: #f6c85e;
+  --color: #ccc;
+  --slateGray: slategray;
+  --disabled: #eaeaea;
 }
 
 h1 {
   text-align: center;
 }
 
-input, button[type="submit"] {
+input, button {
   font-size: 1rem;
-  width: 5ch;
-  height:5ch;
   text-align: center;
   border-radius: 3px;
-  border: solid 1px slategray;
+  border: solid 1px var(--slateGray);
+}
+
+button[type="button"] {
+  padding: .5ex 2ch;
+}
+
+button.play-again {
+  display: none;
+}
+
+input, button[type="submit"] {
+  width: 5ch;
+  height: 5ch;
+}
+
+input:disabled, button:disabled {
+  background-color: var(--disabled);
+  border-color: var(--disabled);
+}
+
+@keyframes flip-correct {
+  0% { 
+    transform: scaleX(1); 
+    background: none;
+    color: var(--color);
+    border: solid 1px var(--slateGray);
+  }
+  50% { 
+    transform: scaleX(0);
+    background: none;
+    color: var(--color);
+    border: solid 1px var(--slateGray);
+  }
+  100% { 
+    transform: scaleX(1); 
+    color: white;
+    border-color: var(--correct);
+    border: solid 1px var(--correct);
+  }
+}
+
+@keyframes flip-misplaced {
+  0% { 
+    transform: scaleX(1); 
+    background: none;
+    border-color: var(--slateGray);
+  }
+  50% { 
+    transform: scaleX(0);
+    background: none;
+    border-color: var(--slateGray);
+  }
+  100% { 
+    transform: scaleX(1);
+    background: linear-gradient(to right bottom, 
+    var(--incorrect-alt) 0%,
+    var(--incorrect-alt) 10%,
+    var(--incorrect) 10%,
+    var(--incorrect) 20%,
+    var(--incorrect-alt) 20%,
+    var(--incorrect-alt) 30%,
+    var(--incorrect) 30%,
+    var(--incorrect) 40%,
+    var(--incorrect-alt) 40%, 
+    var(--incorrect-alt) 50%, 
+    var(--incorrect) 50%,
+    var(--incorrect) 60%,
+    var(--incorrect-alt) 60%, 
+    var(--incorrect-alt) 70%, 
+    var(--incorrect) 70%,
+    var(--incorrect) 80%,
+    var(--incorrect-alt) 80%, 
+    var(--incorrect-alt) 90%, 
+    var(--incorrect) 90%,
+    var(--incorrect) 100%
+  );
+  border-color: var(--incorrect);
+  }
 }
 
 input.correct {
   background: var(--correct);
   color: white;
   border-color: var(--correct);
+  animation: flip-correct 1s linear 1;
 }
 
 input.misplaced {
+  animation: flip-misplaced 1s linear 1;
   background: linear-gradient(to right bottom, 
     var(--incorrect-alt) 0%,
     var(--incorrect-alt) 10%,
@@ -55,4 +136,9 @@ input.misplaced {
 .row {
   text-align: center;
   margin-bottom: 3px;
+}
+
+.actions {
+  margin-top: 1rem;
+  text-align: center;
 }
