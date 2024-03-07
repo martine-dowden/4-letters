@@ -192,3 +192,13 @@ input.misplaced {
   justify-content: center;
   border-radius: 4px;
 }
+
+@keyframes wiggle {
+  0% { transform: translateX(0) }
+  25% { transform: translateX(5px) }
+  75% { transform: translateX(-5px) }
+  100% { transform: translateX(0) }
+}
+.wiggle {
+  animation: wiggle 200ms ease-in-out 3;
+}

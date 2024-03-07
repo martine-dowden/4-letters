@@ -1,13 +1,4 @@
-const dictionary = [
-  'cafe',
-  'duck',
-  'data',
-  'book',
-  'read',
-  'made',
-  'mage',
-  'lice',
-];
+import dictionary from './dictionary.js';
 
 const letterCount = 4;
 let wordOfTheDay, focusable, currentRow = 1;
@@ -25,6 +16,15 @@ let theme = '';
   const toDisable = focusable.slice(letterCount + 1)
   toDisable.forEach(element => element.setAttribute('disabled', true))
   addEventListener('keyup', handleKeydown);
+
+  Array.from(document.querySelectorAll('form')).forEach(
+    form => form.addEventListener('animationend', () => {
+      console.log('animation ended')
+      form.classList.remove('wiggle')
+    })
+  )
+
+  document.querySelector('.play-again').addEventListener('click', playAgain)
 })()
 
 function handleKeydown(event) {
@@ -48,11 +48,19 @@ function handleSubmit(event) {
   const isInvalid = inputs.some(child => !child.validity)
   if (isInvalid) { return } 
 
+  const arrayOfValues = inputs
+    .map(input => input.value.toUpperCase());
+  generateAlphabet(arrayOfValues)
+  
+  const currentWord = arrayOfValues.reduce((acc, letter) => acc + letter, '')
+  
+  if(!dictionary.includes(currentWord)) {
+    form.classList.add('wiggle')
+    return
+  }
+
   inputs.forEach(input => input.setAttribute('disabled', true))
   button.setAttribute('disabled', true)
-  const arrayOfValues = inputs
-    .map(input => input.value.toLowerCase());
-  generateAlphabet(arrayOfValues)
   
   const arrayFromWorldOfTheDay = Array.from(wordOfTheDay)
   arrayOfValues.forEach((letter, index) => {
@@ -62,8 +70,8 @@ function handleSubmit(event) {
       inputs[index].classList.add('misplaced')
     }
   });
-
-  const isCorrect = arrayOfValues.reduce((acc, letter) => acc + letter, '') === wordOfTheDay
+  
+  const isCorrect = currentWord === wordOfTheDay
   if (!isCorrect) {
     const disabledFields = Array.from(document.querySelectorAll(':disabled'))
     const toEnable = disabledFields.slice(currentRow * (letterCount + 1), (currentRow + 1) * (letterCount + 1));
@@ -73,12 +81,12 @@ function handleSubmit(event) {
     return
   }
 
-  const playAgain = document.querySelector('.play-again');
-  playAgain.setAttribute('style', "display: inline-block");
-  playAgain.focus();
+  const playAgainButton = document.querySelector('.play-again');
+  playAgainButton.setAttribute('style', "display: inline-block");
+  playAgainButton.focus();
 }
 
-function playAgain() {
+function playAgain () {
   resetUsedLetter()
 
   const playAgain = document.querySelector('.play-again');
