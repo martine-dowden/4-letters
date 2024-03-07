@@ -11,8 +11,12 @@ const dictionary = [
 
 const letterCount = 4;
 let wordOfTheDay, focusable, currentRow = 1;
+let usedLetters = [];
+let theme = '';
 
 (() => {
+  handleTheme()
+
   document.addEventListener('submit', handleSubmit)
   wordOfTheDay = getWordOfTheDay()
   
@@ -47,7 +51,8 @@ function handleSubmit(event) {
   inputs.forEach(input => input.setAttribute('disabled', true))
   button.setAttribute('disabled', true)
   const arrayOfValues = inputs
-    .map(input => input.value.toLowerCase())
+    .map(input => input.value.toLowerCase());
+  generateAlphabet(arrayOfValues)
   
   const arrayFromWorldOfTheDay = Array.from(wordOfTheDay)
   arrayOfValues.forEach((letter, index) => {
@@ -57,7 +62,7 @@ function handleSubmit(event) {
       inputs[index].classList.add('misplaced')
     }
   });
-  console.log(arrayOfValues, wordOfTheDay)
+
   const isCorrect = arrayOfValues.reduce((acc, letter) => acc + letter, '') === wordOfTheDay
   if (!isCorrect) {
     const disabledFields = Array.from(document.querySelectorAll(':disabled'))
@@ -74,6 +79,11 @@ function handleSubmit(event) {
 }
 
 function playAgain() {
+  resetUsedLetter()
+
+  const playAgain = document.querySelector('.play-again');
+  playAgain.setAttribute('style', "display: none");
+
   focusable
     .forEach((elem, i) => {
       if (elem.nodeName === 'INPUT') {
@@ -94,4 +104,52 @@ function playAgain() {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
+}
+
+function generateAlphabet(newValues) {
+  const section = document.getElementById('letters');
+  section.innerHTML = ''
+  console.log(usedLetters)
+  const newSet = Array.from(new Set([...usedLetters, ...newValues]))
+  usedLetters = newSet
+  usedLetters.forEach(letter => {
+    const elem = document.createElement('div')
+    elem.setAttribute('id', letter)
+    elem.innerHTML = letter
+    section.append(elem)
+  })
+}
+
+function resetUsedLetter() {
+  usedLetters = []
+  const section = document.getElementById('letters');
+  section.innerHTML = ''
+}
+
+function handleTheme() {
+  theme = localStorage.getItem('wordle-4-theme')
+  const themeButton = document.getElementById('theme')
+  
+  if (!theme) { 
+    console.log(window.matchMedia('(prefers-color-scheme: dark)').matches)
+    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  console.log(theme)
+  toggleTheme()
+  themeButton.addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark'
+    toggleTheme()
+  })
+}
+
+function toggleTheme() {
+  localStorage.setItem('wordle-4-theme', theme)
+  const themeButton = document.getElementById('theme')
+  if (theme === 'dark') {
+    document.querySelector('body').classList.add('dark')
+    themeButton.innerText = 'light theme' 
+  } else {
+    document.querySelector('body').classList.remove('dark')
+    themeButton.innerText = 'dark theme'
+  }
 }

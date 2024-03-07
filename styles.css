@@ -2,23 +2,51 @@
 
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: var(--color);
+  background: var(--background);
+
   --correct: #19631e;
+  --correct-contrast: white;
   --incorrect: #f6da5e;
   --incorrect-alt: #f6c85e;
-  --color: #ccc;
-  --slateGray: slategray;
+  --incorrect-contrast: #333;
+  
+  --color: #707070;
+  --background: white;
+  --border: slategray;
   --disabled: #eaeaea;
+  --disabled-contrast: #797979;
+}
+body.dark {
+  --correct: #19631e;
+  --correct-contrast: white;
+  --incorrect: #f6da5e;
+  --incorrect-alt: #f6c85e;
+  --incorrect-contrast: #333;
+
+  --color: #fafafa;
+  --background: slategray;
+  --border: #c2d5ea;
+  --disabled: #506071;
+  --disabled-contrast: #cdcdcd;
 }
 
 h1 {
   text-align: center;
 }
 
+header {
+  display: flex;
+  justify-content: flex-end;
+}
+
 input, button {
   font-size: 1rem;
   text-align: center;
   border-radius: 3px;
-  border: solid 1px var(--slateGray);
+  border: solid 1px var(--border);
+  background: none;
+  color: var(--color);
 }
 
 button[type="button"] {
@@ -37,6 +65,7 @@ input, button[type="submit"] {
 input:disabled, button:disabled {
   background-color: var(--disabled);
   border-color: var(--disabled);
+  color: var(--disabled-contrast);
 }
 
 @keyframes flip-correct {
@@ -96,12 +125,13 @@ input:disabled, button:disabled {
     var(--incorrect) 100%
   );
   border-color: var(--incorrect);
+  color: var(--incorrect-contrast);
   }
 }
 
 input.correct {
   background: var(--correct);
-  color: white;
+  color: var(--correct-contrast);
   border-color: var(--correct);
   animation: flip-correct 1s linear 1;
 }
@@ -131,6 +161,7 @@ input.misplaced {
     var(--incorrect) 100%
   );
   border-color: var(--incorrect);
+  color: var(--incorrect-contrast);
 }
 
 .row {
@@ -141,4 +172,23 @@ input.misplaced {
 .actions {
   margin-top: 1rem;
   text-align: center;
+}
+
+.letters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.letters > div {
+  height: 2rem;
+  width: 2rem;
+  border: solid 1px var(--slateGray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
 }
