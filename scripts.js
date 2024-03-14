@@ -19,7 +19,6 @@ let theme = '';
 
   Array.from(document.querySelectorAll('form')).forEach(
     form => form.addEventListener('animationend', () => {
-      console.log('animation ended')
       form.classList.remove('wiggle')
     })
   )
@@ -35,13 +34,11 @@ function handleKeydown(event) {
 
 function getWordOfTheDay() {
   const wordIndex = getRandomInt(dictionary.length - 1)
-  console.log('word of the day:', dictionary[wordIndex])
   return dictionary[wordIndex]
 }
 
 function handleSubmit(event) {
   event.preventDefault()
-  console.log(event)
   const form = event.srcElement;
   const button = form.querySelector('button[type="submit"]')
   const inputs = Array.from(form.querySelectorAll('input'))
@@ -117,7 +114,6 @@ function getRandomInt(max) {
 function generateAlphabet(newValues) {
   const section = document.getElementById('letters');
   section.innerHTML = ''
-  console.log(usedLetters)
   const newSet = Array.from(new Set([...usedLetters, ...newValues]))
   usedLetters = newSet
   usedLetters.forEach(letter => {
@@ -139,10 +135,8 @@ function handleTheme() {
   const themeButton = document.getElementById('theme')
   
   if (!theme) { 
-    console.log(window.matchMedia('(prefers-color-scheme: dark)').matches)
     theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
-  console.log(theme)
   toggleTheme()
   themeButton.addEventListener('click', () => {
     theme = theme === 'dark' ? 'light' : 'dark'
